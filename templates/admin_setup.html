@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin Setup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+      .hidden {
+        display: none;
+      }
+      .time-slot-list {
+        margin-top: 10px;
+      }
+      .time-slot-item {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+      .time-slot-item button {
+        background: none;
+        border: none;
+        color: white;
+        margin-left: 5px;
+        cursor: pointer;
+      }
+    </style>
+    <script>
+      function addTimeSlot() {
+        const select = document.getElementById('time_slots_select');
+        const selectedTime = select.options[select.selectedIndex].value;
+        const timeSlotList = document.getElementById('time_slot_list');
+        
+        if (selectedTime && !document.getElementById(`time_slot_${selectedTime}`)) {
+          const listItem = document.createElement('div');
+          listItem.className = 'time-slot-item';
+          listItem.id = `time_slot_${selectedTime}`;
+          listItem.innerHTML = `${selectedTime} <button onclick="removeTimeSlot('${selectedTime}')">&times;</button>`;
+          
+          const hiddenInput = document.createElement('input');
+          hiddenInput.type = 'hidden';
+          hiddenInput.name = 'time_slots';
+          hiddenInput.value = selectedTime;
+          hiddenInput.id = `input_${selectedTime}`;
+          
+          listItem.appendChild(hiddenInput);
+          timeSlotList.appendChild(listItem);
+        }
+      }
+
+      function removeTimeSlot(timeSlot) {
+        const listItem = document.getElementById(`time_slot_${timeSlot}`);
+        listItem.parentNode.removeChild(listItem);
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="title">
+          <h1>Admin Setup</h1>
+        </div>
+        <div class="user-info">
+          <span>Logged in as: {{ current_user.username }} ({{ current_user.role }})</span>
+          <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        </div>
+      </div>
+      <nav class="navigation">
+        <a href="{{ url_for('index') }}" class="button">Back to Home</a>
+      </nav>
+    </header>
+    <div class="form-container">
+      <form method="post">
+        <fieldset>
+          <legend>Add Department:</legend>
+          <label for="department_name">Department Name:</label>
+          <input type="text" id="department_name" name="department_name">
+        </fieldset>
+        
+        <fieldset>
+          <legend>Add Doctor:</legend>
+          <label for="doctor_name">Name:</label>
+          <input type="text" id="doctor_name" name="doctor_name">
+          <label for="specialty">Specialty:</label>
+          <input type="text" id="specialty" name="specialty">
+          <label for="contact">Contact:</label>
+          <input type="text" id="contact" name="contact">
+        </fieldset>
+
+        <fieldset>
+          <legend>Set Available Time Slots:</legend>
+          <label for="time_slots_select">Select Time Slot:</label>
+          <select id="time_slots_select" name="time_slots_select">
+            {% for time in suggested_times %}
+              <option value="{{ time }}">{{ time }}</option>
+            {% endfor %}
+          </select>
+          <button type="button" onclick="addTimeSlot()">Add Time Slot</button>
+          <div id="time_slot_list" class="time-slot-list"></div>
+        </fieldset>
+        
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

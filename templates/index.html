@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MediDoc</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="title">
+          <h1>MediDoc</h1>
+        </div>
+        <div class="user-info">
+          <span>Logged in as: {{ current_user.username }} ({{ current_user.role }})</span>
+          <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        </div>
+      </div>
+      <nav class="navigation">
+        {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('admin_setup') }}" class="button">Admin Setup</a>
+        {% endif %}
+        {% if current_user.role == 'user' %}
+          <a href="{{ url_for('book_appointment') }}" class="button">Book Appointment</a>
+        {% endif %}
+      </nav>
+    </header>
+    <div class="container">
+      {% if current_user.role == 'admin' %}
+        <h2>Patients</h2>
+        <ul>
+          {% for patient in patients %}
+            <li>
+              {{ patient.name }} (DOB: {{ patient.dob }}, {{ patient.age }} years old, {{ patient.gender }}) - {{ patient.contact }}
+              <div class="button-group">
+                <form action="{{ url_for('delete_patient', patient_id=patient.id) }}" method="post">
+                  <button type="submit" class="form-button">Delete</button>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <h2>Doctors</h2>
+      <ul>
+        {% for doctor in doctors %}
+          <li>
+            {{ doctor.name }} ({{ doctor.specialty }}) - {{ doctor.contact }}
+            {% if current_user.role == 'admin' %}
+              <div class="button-group">
+                <form action="{{ url_for('delete_doctor', doctor_id=doctor.id) }}" method="post">
+                  <button type="submit" class="form-button">Delete</button>
+                </form>
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+      <h2>Appointments</h2>
+      <ul>
+        {% for appointment in appointments %}
+          <li>
+            Patient ID: {{ appointment.patient_id }}, Doctor ID: {{ appointment.doctor_id }}, Date: {{ appointment.date }}, Time: {{ appointment.time }}, Reason: {{ appointment.reason }}, Status: {{ appointment.status }}
+            {% if current_user.role == 'admin' %}
+              <div class="button-group">
+                <form action="{{ url_for('manage_appointments') }}" method="post">
+                  <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+                  <button type="submit" name="action" value="confirm" class="form-button">Confirm</button>
+                  <button type="submit" name="action" value="decline" class="form-button">Decline</button>
+                </form>
+                <form action="{{ url_for('delete_appointment', appointment_id=appointment.id) }}" method="post">
+                  <button type="submit" class="form-button">Delete</button>
+                </form>
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
