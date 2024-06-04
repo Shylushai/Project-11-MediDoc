@@ -240,12 +240,12 @@ def book_appointment():
 @login_required
 def user_list():
     if request.method == 'POST':
-        users = fetch_query('SELECT * FROM Users')
         role = request.form['role']
         newrole = request.form['newrole']
         print(role)
         print(newrole)
         execute_query("UPDATE Users SET role='{value1}' WHERE id ='{value2}'".format(value1 = newrole, value2 = role))
+        users = fetch_query('SELECT * FROM Users')
         return render_template('user_list.html', users=users)
     users = fetch_query('SELECT * FROM Users')
     return render_template('user_list.html', users=users)
