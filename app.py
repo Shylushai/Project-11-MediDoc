@@ -3,9 +3,11 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 import sqlite3
 from flask_bcrypt import Bcrypt
 from tenacity import retry, stop_after_attempt, wait_fixed
+from flask_cors import CORS
 import logging
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = 'your_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -260,4 +262,4 @@ def delete(id):
     return redirect(url_for('user_management'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
