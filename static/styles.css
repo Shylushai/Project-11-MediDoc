@@ -42,7 +42,7 @@ header {
   width: 80%;
   margin: auto;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   gap: 10px;
   margin-top: 10px;
 }
@@ -116,6 +116,17 @@ button.form-button:hover {
   width: 100%;
   max-width: 600px;
   text-align: center;
+  margin: 20px auto;
+}
+
+.userlist-container {
+  background: #fff;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  align-items: center;
   margin: 20px auto;
 }
 

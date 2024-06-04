@@ -22,6 +22,10 @@ def book_appointment(patient_id, doctor_id, date, time, reason):
     ''', (patient_id, doctor_id, date, time, reason))
     conn.commit()
 
+def get_users():
+    cursor.execute('SELECT * FROM Users')
+    return cursor.fetchall()
+
 def get_patients():
     cursor.execute('SELECT * FROM Patients')
     return cursor.fetchall()

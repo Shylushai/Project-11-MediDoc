@@ -19,11 +19,20 @@
       </div>
       <nav class="navigation">
         {% if current_user.role == 'admin' %}
-          <a href="{{ url_for('admin_setup') }}" class="button">Admin Setup</a>
+          <a href="{{ url_for('admin_setup') }}" class="button">Role Management</a>
+          <a href="{{ url_for('user_list') }}" class="button">User List</a>
         {% endif %}
-        {% if current_user.role == 'user' %}
-          <a href="{{ url_for('book_appointment') }}" class="button">Book Appointment</a>
+        {% if current_user.role == 'patient' %}
+          <a href="{{ url_for('book_appointment') }}" class="button">update Information</a>
+          <a href="{{ url_for('book_appointment') }}" class="button">View Appointments</a>
         {% endif %}
+        {% if current_user.role == 'receptionist' %}
+        <a href="{{ url_for('book_appointment') }}" class="button">Book Appointment</a>
+        <a href="{{ url_for('book_appointment') }}" class="button">Patient Search</a>
+        {% endif %}
+        {% if current_user.role == 'doctor' %}
+       <a href="{{ url_for('book_appointment') }}" class="button">Patient Search</a>
+      {% endif %}
       </nav>
     </header>
     <div class="container">
