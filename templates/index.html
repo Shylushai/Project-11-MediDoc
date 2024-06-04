@@ -19,8 +19,7 @@
       </div>
       <nav class="navigation">
         {% if current_user.role == 'admin' %}
-          <a href="{{ url_for('admin_setup') }}" class="button">Role Management</a>
-          <a href="{{ url_for('user_list') }}" class="button">User List</a>
+          <a href="{{ url_for('user_list') }}" class="button">User Management</a>
         {% endif %}
         {% if current_user.role == 'patient' %}
           <a href="{{ url_for('book_appointment') }}" class="button">update Information</a>

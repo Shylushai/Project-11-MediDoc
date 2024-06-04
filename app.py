@@ -79,7 +79,7 @@ def index():
         doctors = fetch_query('SELECT * FROM Doctors')
         appointments = fetch_query('SELECT * FROM Appointments WHERE patient_id = ?', (current_user.id,))
     
-    return render_template('index.html', patients=patients, doctors=doctors, appointments=appointments, users=users)
+    return render_template('index.html', patients=patients, doctors=doctors, appointments=appointments)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -236,20 +236,28 @@ def book_appointment():
     available_slots = fetch_query('SELECT * FROM AvailableTimeSlots')
     return render_template('book_appointment.html', departments=departments, doctors=doctors, available_slots=available_slots)
 
-@app.route('/user_list', methods=['GET', 'DELETE'])
+@app.route('/user_list', methods=['GET', 'POST'])
 @login_required
 def user_list():
+    if request.method == 'POST':
+        users = fetch_query('SELECT * FROM Users')
+        role = request.form['role']
+        newrole = request.form['newrole']
+        print(role)
+        print(newrole)
+        execute_query("UPDATE Users SET role='{value1}' WHERE id ='{value2}'".format(value1 = newrole, value2 = role))
+        return render_template('user_list.html', users=users)
     users = fetch_query('SELECT * FROM Users')
     return render_template('user_list.html', users=users)
 
 
-@app.route('/delete/<int:id>', methods=['POST'])
+@app.route('/delete/<int:id>', methods=['GET'])
 @login_required
 def delete(id):
-    execute_query('DELETE FROM Users WHERE id = ?', (id))
-    return redirect(url_for('/user_list'))
-
-
+    if request.method == 'GET':
+        execute_query('DELETE FROM Users WHERE id = {value}'.format(value = id))
+    execute_query('DELETE FROM Users WHERE id = {value}'.format(value = id))
+    return redirect(url_for('user_list'))
 
 if __name__ == '__main__':
     app.run(debug=True)

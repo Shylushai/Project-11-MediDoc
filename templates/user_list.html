@@ -22,18 +22,33 @@
         <a href="{{ url_for('index') }}" class="button">Back to Home</a>
       </nav>
     </header>
+    {% if current_user.role == 'admin' %}
     <div class="userlist-container">
     {% for user in users %}
-    <a>{{ user.username }}</a>
-    <div style="justify-self: right;">
-    <a href="/delete/{{ user.id }}" class="button">
-      Delete   
-    </a>
+    <a>{{ user.username }} ({{ user.role }})</a>
+    <div class="navigation">
+    <form method="post">
+
+      <a>id: </a><input id="role" name="role" readonly value="{{ user.id }}">
+      <select id="newrole" name="newrole" required>
+        <option value="patient">Patient</option>
+        <option value="doctor">Doctor</option>
+        <option value="receptionist">Receptionist</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button type="submit">Change Role</button>
+    </form>
+      <a href="/delete/{{ user.id }}" class="button" style="align-self: end;">
+        Delete   
+      </a>
     </div>
     <br>
     {% endfor %}
    </div>
 
 </body>
+    {% else %}
+    <h1>Not Authorised</h1>
+    {% endif %}
 
 </html>
