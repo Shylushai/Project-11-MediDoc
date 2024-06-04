@@ -36,13 +36,12 @@ function Copyright(props: any) {
 export default function SignIn() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const loginData = await api.get("/login");
-    console.log(loginData);
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const loginData = await api.get("/login");
+      console.log(loginData);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
