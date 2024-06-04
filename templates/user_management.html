@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>User List</title>
+    <title>User Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   </head>
 
@@ -11,7 +11,7 @@
     <header>
       <div class="header-container">
         <div class="title">
-          <h1>User List</h1>
+          <h1>User Management</h1>
         </div>
         <div class="user-info">
           <span>Logged in as: {{ current_user.username }} ({{ current_user.role }})</span>
@@ -48,7 +48,7 @@
 
 </body>
     {% else %}
-    <h1>Not Authorised</h1>
+    <h1>Sorry you are not authorised to access this</h1>
     {% endif %}
 
 </html>

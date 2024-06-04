@@ -236,9 +236,9 @@ def book_appointment():
     available_slots = fetch_query('SELECT * FROM AvailableTimeSlots')
     return render_template('book_appointment.html', departments=departments, doctors=doctors, available_slots=available_slots)
 
-@app.route('/user_list', methods=['GET', 'POST'])
+@app.route('/user_management', methods=['GET', 'POST'])
 @login_required
-def user_list():
+def user_management():
     if request.method == 'POST':
         role = request.form['role']
         newrole = request.form['newrole']
@@ -246,9 +246,9 @@ def user_list():
         print(newrole)
         execute_query("UPDATE Users SET role='{value1}' WHERE id ='{value2}'".format(value1 = newrole, value2 = role))
         users = fetch_query('SELECT * FROM Users')
-        return render_template('user_list.html', users=users)
+        return render_template('user_management.html', users=users)
     users = fetch_query('SELECT * FROM Users')
-    return render_template('user_list.html', users=users)
+    return render_template('user_management.html', users=users)
 
 
 @app.route('/delete/<int:id>', methods=['GET'])
@@ -257,7 +257,7 @@ def delete(id):
     if request.method == 'GET':
         execute_query('DELETE FROM Users WHERE id = {value}'.format(value = id))
     execute_query('DELETE FROM Users WHERE id = {value}'.format(value = id))
-    return redirect(url_for('user_list'))
+    return redirect(url_for('user_management'))
 
 if __name__ == '__main__':
     app.run(debug=True)
