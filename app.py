@@ -259,5 +259,30 @@ def delete(id):
     execute_query('DELETE FROM Users WHERE id = {value}'.format(value = id))
     return redirect(url_for('user_management'))
 
+@app.route('/update_information', methods=['GET', 'POST'])
+@login_required
+def update_information():
+    users = fetch_query('SELECT * FROM Users')
+    return render_template('add_patient.html', users=users)
+
+@app.route('/view_appointment', methods=['GET', 'POST'])
+@login_required
+def view_appointment():
+    users = fetch_query('SELECT * FROM Users')
+    return render_template('view_appointment.html', users=users)
+
+@app.route('/receptionist_patient_search', methods=['GET', 'POST'])
+@login_required
+def receptionist_patient_search():
+    users = fetch_query('SELECT * FROM Users')
+    return render_template('receptionist_patient_search.html', users=users)
+
+@app.route('/doctor_patient_search', methods=['GET', 'POST'])
+@login_required
+def doctor_patient_search():
+    users = fetch_query('SELECT * FROM Users')
+    return render_template('Doctor_patient_search.html', users=users)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
