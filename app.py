@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, make_response, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import sqlite3
 from flask_bcrypt import Bcrypt
@@ -100,8 +100,8 @@ def login():
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password', 'error')
-    # return render_template('login.html')
-    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+    return render_template('login.html')
+    # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 @app.route('/manage_appointments', methods=['POST'])
 @login_required
