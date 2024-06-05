@@ -158,3 +158,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#DB
+hospital.db
