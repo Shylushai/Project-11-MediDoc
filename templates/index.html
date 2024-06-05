@@ -22,15 +22,15 @@
           <a href="{{ url_for('user_management') }}" class="button">User Management</a>
         {% endif %}
         {% if current_user.role == 'patient' %}
-          <a href="{{ url_for('book_appointment') }}" class="button">update Information</a>
-          <a href="{{ url_for('book_appointment') }}" class="button">View Appointments</a>
+          <a href="{{ url_for('update_information') }}" class="button">update Information</a>
+          <a href="{{ url_for('view_appointment') }}" class="button">View Appointments</a>
         {% endif %}
         {% if current_user.role == 'receptionist' %}
-        <a href="{{ url_for('book_appointment') }}" class="button">Book Appointment</a>
-        <a href="{{ url_for('book_appointment') }}" class="button">Patient Search</a>
+        <a href="{{ url_for('book_appointment') }}" class="button">Make Appointment</a>
+        <a href="{{ url_for('receptionist_patient_search') }}" class="button">Patient Search</a>
         {% endif %}
         {% if current_user.role == 'doctor' %}
-       <a href="{{ url_for('book_appointment') }}" class="button">Patient Search</a>
+       <a href="{{ url_for('doctor_patient_search') }}" class="button">Patient Search</a>
       {% endif %}
       </nav>
     </header>
