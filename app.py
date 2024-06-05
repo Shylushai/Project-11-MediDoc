@@ -4,11 +4,13 @@ import sqlite3
 from flask_bcrypt import Bcrypt
 from tenacity import retry, stop_after_attempt, wait_fixed
 from flask_cors import CORS
+from api.v2.endpoint import endpoint_v2
 import logging
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'your_secret_key'
+app.register_blueprint(endpoint_v2, url_prefix='/api/v2')
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
