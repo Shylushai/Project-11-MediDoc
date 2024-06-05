@@ -100,7 +100,8 @@ def login():
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password', 'error')
-    return render_template('login.html')
+    # return render_template('login.html')
+    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 @app.route('/manage_appointments', methods=['POST'])
 @login_required
