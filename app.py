@@ -4,6 +4,9 @@ import sqlite3
 from flask_bcrypt import Bcrypt
 from tenacity import retry, stop_after_attempt, wait_fixed
 import logging
+import os
+from io import BytesIO
+from flask import send_from_directory
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -242,8 +245,6 @@ def user_management():
     if request.method == 'POST':
         role = request.form['role']
         newrole = request.form['newrole']
-        print(role)
-        print(newrole)
         execute_query("UPDATE Users SET role='{value1}' WHERE id ='{value2}'".format(value1 = newrole, value2 = role))
         users = fetch_query('SELECT * FROM Users')
         return render_template('user_management.html', users=users)
@@ -281,8 +282,51 @@ def receptionist_patient_search():
 @login_required
 def doctor_patient_search():
     users = fetch_query('SELECT * FROM Users')
-    return render_template('Doctor_patient_search.html', users=users)
+    patients = fetch_query('SELECT * FROM Users WHERE role = \'patient\'')
+    return render_template('Doctor_patient_search.html', users=users, patients=patients)
 
+@app.route('/upload', methods=['POST'])
+def upload():
+    id = request.form['id']
+    file = request.files['file']
+    users = fetch_query('SELECT * FROM Users')
+    files = os.listdir('uploads/{value}'.format(value = id))
+    patients = fetch_query('SELECT * FROM Users WHERE role = \'patient\'')
+    print(os.listdir('uploads/{value}'.format(value = id)))
+    try:
+        os.mkdir('uploads/{value}'.format(value = id))
+    except OSError:
+        print("Creation of the directory failed")
+    else:
+        print ("Successfully created the directory")
+    if file:
+        file.save(f'uploads/{id}/{file.filename}')
+    return render_template('Doctor_patient_search.html', users=users, files=files, patients=patients)
+
+@app.route('/download/<int:id>', methods=['GET'])
+@login_required
+def download(id):
+    id=id
+    try:
+        os.mkdir('uploads/{value}'.format(value = id))
+    except OSError:
+        print("Creation of the directory failed")
+    else:
+        print ("Successfully created the directory")
+    users = fetch_query('SELECT * FROM Users')
+    files = os.listdir('uploads/{value}'.format(value = id))
+
+    return render_template('download.html', users=users, files=files, id=id)
+
+@app.route('/document_download/<int:id>/<string:file_name>', methods=['GET'])
+@login_required
+def document_download(id, file_name):
+    if current_user.role != 'doctor':
+        return redirect(url_for('index'))
+    file = file_name
+    print(file)
+    users = fetch_query('SELECT * FROM Users')
+    return send_from_directory('uploads/{value}'.format(value = id), file, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

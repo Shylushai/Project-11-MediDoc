@@ -18,24 +18,15 @@
         </div>
       </div>
       <nav class="navigation">
-        <a href="{{ url_for('index') }}" class="button">Back to Home</a>
+        <a href="{{ url_for('doctor_patient_search') }}" class="button">Back to Search</a>
       </nav>
     </header>
-    {% if current_user.role == 'doctor' %}
-    <h1>Patient Search</h1>
-    {% for patient in patients %}
+    <h1>Download files</h1>
+    {% for file in files %}
     <div class="userlist-container">
-      <a>{{ patient.username }}</a>
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input id="id" name="id" readonly value="{{ patient.id }}" style="visibility: hidden">
-        <input type="submit" value="Upload files" class="button">
-      </form><a href="/download/{{ patient.id }}" class="button">download files</a>
+    <a> {{ file }} </a><a href="/document_download/{{ id }}/{{ file }}" class="button">download</a>
     </div>
     {% endfor %}
 
-    {% else %}
-    <h1>Sorry you are not authorised to access this</h1>
-    {% endif %}
-  </body>
+</body>
 </html>

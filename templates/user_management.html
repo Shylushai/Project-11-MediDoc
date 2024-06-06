@@ -29,7 +29,7 @@
     <div class="navigation">
     <form method="post">
 
-      <a>id: </a><input id="role" name="role" readonly value="{{ user.id }}">
+      <input id="role" name="role" readonly value="{{ user.id }}" style="visibility: hidden">
       <select id="newrole" name="newrole" required>
         <option value="patient">Patient</option>
         <option value="doctor">Doctor</option>
