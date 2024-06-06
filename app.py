@@ -1,12 +1,16 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, make_response, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import sqlite3
 from flask_bcrypt import Bcrypt
 from tenacity import retry, stop_after_attempt, wait_fixed
+from flask_cors import CORS
+from api.v2.endpoint import endpoint_v2
 import logging
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = 'your_secret_key'
+app.register_blueprint(endpoint_v2, url_prefix='/api/v2')
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -99,6 +103,7 @@ def login():
         else:
             flash('Invalid username or password', 'error')
     return render_template('login.html')
+    # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 @app.route('/manage_appointments', methods=['POST'])
 @login_required
@@ -285,4 +290,4 @@ def doctor_patient_search():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
