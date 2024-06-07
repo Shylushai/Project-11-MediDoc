@@ -276,7 +276,8 @@ def view_appointment():
 @login_required
 def receptionist_patient_search():
     users = fetch_query('SELECT * FROM Users')
-    return render_template('receptionist_patient_search.html', users=users)
+    patients = fetch_query('SELECT * FROM Users WHERE role = \'patient\'')
+    return render_template('receptionist_patient_search.html', users=users, patients=patients)
 
 @app.route('/doctor_patient_search', methods=['GET', 'POST'])
 @login_required

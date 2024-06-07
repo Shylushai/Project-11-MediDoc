@@ -23,7 +23,18 @@
     </header>
     {% if current_user.role == 'receptionist' %}
     <h1>Patient Search</h1>
+    {% for patient in patients %}
+    <div class="userlist-container">
+      <a>{{ patient.username }}</a>
+      <form action="/book_appoiontment" method="post" enctype="multipart/form-data">
+        <input id="id" name="id" readonly value="{{ patient.id }}" style="visibility: hidden">
+        <input type="submit" value="Add Appointment" class="button">
+      </form>
+    </div>
+    {% endfor %}
+
     {% else %}
     <h1>Sorry you are not authorised to access this</h1>
     {% endif %}
+  </body>
 </html>
